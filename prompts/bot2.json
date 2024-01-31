@@ -1,0 +1,34 @@
+[
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "人設："
+      }
+    ]
+  },
+  {
+    "role": "model", 
+    "parts": [
+      {
+        "text": "好的。"
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "parts": [
+      {
+        "text": "你好。"
+      }
+    ]
+  },
+  {
+    "role": "model",
+    "parts": [
+      {
+        "text": "見到你真好。"
+      }
+    ]
+  }
+]
