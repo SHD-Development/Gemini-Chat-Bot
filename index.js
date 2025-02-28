@@ -10,7 +10,7 @@ const {
 } = require("@google/generative-ai");
 const fs = require("fs");
 const config = require("./config.js");
-const MODEL_NAME = "gemini-pro";
+const MODEL_NAME = config.model;
 
 const noisy = [
 	"哇嗚！這裡要爆炸啦！",
@@ -37,10 +37,10 @@ const safetySettings = [
 ];
 
 const generationConfig = {
-	temperature: 1,
-	topK: 1,
-	topP: 1,
-	maxOutputTokens: 1000,
+	temperature: config.temperature,
+	topK: config.topK,
+	topP: config.topP,
+	maxOutputTokens: config.maxOutputTokens,
 };
 
 let used = 0;
@@ -67,7 +67,7 @@ config.bots.map((bot) => {
 			history[message.channel.id] = [];
 			return message.reply("已重置");
         }
-		// if (message.author.bot) return;
+		if (message.author.bot) return;
 		if (
 			message.author.id === client.user.id ||
 			(!bot.channels.includes(message.channel.id) &&
@@ -97,10 +97,13 @@ config.bots.map((bot) => {
 
 		const result = await chat
 			.sendMessage(`[${message.author.username}]: ${message.content}`)
-			.catch(() => {
+				.catch((error) => {
+				console.error(error);
 				return message.reply(noisy[Math.floor(Math.random() * noisy.length)]);
 			});
 		if (!result) return;
+
+		const responseText = result.response?.text?.() || "無法生成回覆，請查看 Console。";
 
 		history[message.channel.id].push(
 			{
@@ -115,7 +118,7 @@ config.bots.map((bot) => {
 				role: "model",
 				parts: [
 					{
-						text: result.response.text(),
+						text: responseText,
 					},
 				],
 			}
@@ -128,7 +131,7 @@ config.bots.map((bot) => {
 			);
 
 		new Promise((resolve) => setTimeout(resolve, 1000));
-		return message.reply(result.response.text());
+		return message.reply(responseText);
 	});
 
 	client.login(bot.token);

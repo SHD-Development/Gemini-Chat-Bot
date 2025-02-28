@@ -3,6 +3,11 @@ module.exports = {
 	apikeys: [
 		"",
 	],
+	model: "gemini-2.0-flash",
+	temperature: 1,
+	topK: 1,
+	topP: 1,
+	maxOutputTokens: 1000,
 	owners: [""],
 	bots: [
 		{
